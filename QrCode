@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-R">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h1 {
+            color: #111;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            color: #555;
+            margin-bottom: 2rem;
+        }
+        #text-input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        #generate-btn {
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        #generate-btn:hover {
+            background-color: #0056b3;
+        }
+        #qrcode-container {
+            margin-top: 2rem;
+            /* This div is intentionally left empty. JS will populate it. */
+            /* We give it a min-height so the layout doesn't "jump" */
+            min-height: 256px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Style for the generated QR code (it's created as an img tag) */
+        #qrcode-container img {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <p>Enter any URL or text to generate your QR code instantly.</p>
+        
+        <input type="text" id="text-input" placeholder="e.g., https://www.google.com">
+        
+        <button id="generate-btn">Generate QR Code</button>
+        
+        <div id="qrcode-container">
+            </div>
+    </div>
+
+    <script>
+        // Wait for the document to be fully loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const generateBtn = document.getElementById("generate-btn");
+            const textInput = document.getElementById("text-input");
+            const qrContainer = document.getElementById("qrcode-container");
+            
+            // This is a variable to hold our QR code object
+            let qrCode = null;
+
+            // Function to create the QR code
+            function createQRCode() {
+                const text = textInput.value;
+
+                if (!text) {
+                    alert("Please enter text or a URL!");
+                    return;
+                }
+
+                // Clear the container of any old QR codes
+                qrContainer.innerHTML = "";
+
+                // Use the 'QRCode' library we imported
+                // 'qrcode-container' is the ID of the element where it will be drawn
+                qrCode = new QRCode("qrcode-container", {
+                    text: text,
+                    width: 256,  // Set width
+                    height: 256, // Set height
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H // 'H' is for High error correction
+                });
+            }
+
+            // Listen for a click on the button
+            generateBtn.addEventListener("click", createQRCode);
+
+            // Bonus: Allow pressing "Enter" in the text box
+            textInput.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    createQRCode();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
